@@ -61,20 +61,27 @@ defineProps({
 
 defineEmits(["toggleCell"]);
 
-// Cell text is not a uniform length, and the cell must stay a square, so the
-// label steps down as the prediction gets longer.
+// The cell must stay a square, so the label steps down as its longest word or
+// its overall length grows. Hyphenated parts count as separate words, because
+// the browser can break at a hyphen without help.
 function labelSizeClass(text) {
-    const length = text?.length ?? 0;
+    const value = text ?? "";
+    const longestWord = value
+        .split(/[\s-]+/)
+        .filter(Boolean)
+        .reduce((longest, word) => Math.max(longest, word.length), 0);
+    const estimatedLines = value.length / 3.5;
+    const pressure = Math.max(longestWord, estimatedLines);
 
-    if (length > 34) {
+    if (pressure > 10) {
         return "bingo__cell-label--xlong";
     }
 
-    if (length > 26) {
+    if (pressure > 9) {
         return "bingo__cell-label--long";
     }
 
-    if (length > 18) {
+    if (pressure > 8) {
         return "bingo__cell-label--medium";
     }
 

@@ -178,7 +178,6 @@ defineExpose({
     font-size: clamp(0.6875rem, 25cqw, var(--cell-label-size, 1rem));
     font-weight: 600;
     line-height: var(--leading-snug);
-    overflow-wrap: break-word;
     hyphens: auto;
 }
 
